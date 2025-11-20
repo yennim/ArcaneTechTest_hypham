@@ -8,6 +8,7 @@ public class ProjectManager : MonoBehaviour
     private Project currentProject;
     private List<Project> projects;
 
+    [SerializeField] private Transform room;
     [SerializeField] private List<string> projectNames;
 
     // I decided to only consider one project at a time, no multiple tabs to edit projects. Makes it easier to find the instance.
@@ -44,7 +45,7 @@ public class ProjectManager : MonoBehaviour
 
     public void AddModel(ModelTypeStruct modelType)
     {
-
+        Instantiate(modelType.Prefab, room);
     }
 
     public void SetSelectedModel(ModelController modelController)
