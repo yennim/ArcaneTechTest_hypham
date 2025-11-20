@@ -5,6 +5,7 @@ public class ModelController : MonoBehaviour
 {
     private bool isSelected;
     private Renderer modelRenderer;
+    [SerializeField] private UIEditModel uiEditModel;
 
     // TODO: secure access
     public Model Model { get; private set; }
@@ -12,6 +13,7 @@ public class ModelController : MonoBehaviour
     private void OnEnable()
     {
         ProjectManager.Instance.OnModelSelected += RefreshSelectedState;
+        uiEditModel.gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -22,6 +24,7 @@ public class ModelController : MonoBehaviour
     private void RefreshSelectedState(ModelController modelController)
     {
         isSelected = (modelController == this);
+        uiEditModel.gameObject.SetActive(isSelected);
     }
 
     public void Initialize(Model model)
