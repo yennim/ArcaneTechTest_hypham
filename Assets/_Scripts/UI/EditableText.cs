@@ -22,4 +22,9 @@ public class EditableText : MonoBehaviour
         inputField.gameObject.SetActive(false);
         button.gameObject.SetActive(true);
     }
+
+    public void SetText(string name)
+    {
+        text.text = name;
+    }
 }
