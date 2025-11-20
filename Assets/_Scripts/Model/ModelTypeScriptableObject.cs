@@ -13,5 +13,5 @@ public class ModelTypeScriptableObject : ScriptableObject
 public struct ModelTypeStruct
 {
     public EModelType ModelType;
-    public GameObject Prefab;
+    public ModelController Prefab;
 }

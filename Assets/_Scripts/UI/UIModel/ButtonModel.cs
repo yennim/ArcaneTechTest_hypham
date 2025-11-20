@@ -9,7 +9,7 @@ public class ButtonModel : MonoBehaviour
     public void InitializeButton(ModelTypeStruct modelTypeStruct)
     {
         Model = modelTypeStruct;
-        text.text = modelTypeStruct.Prefab.name;
+        text.text = modelTypeStruct.Prefab.gameObject.name;
     }
 
     public void OnModelClick()

@@ -982,7 +982,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 5365005355970143840, guid: b5eeb1b453e282044ad51b7b330e5696, type: 3}
-  modelsData: {fileID: 11400000, guid: f314acc6536b5bf468eec6c4d846b1e0, type: 2}
   container: {fileID: 587080708}
 --- !u!114 &587080712
 MonoBehaviour:
@@ -1055,6 +1054,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiProjects: {fileID: 2091606539}
   modelsContainer: {fileID: 1868960321}
+  modelsData: {fileID: 11400000, guid: f314acc6536b5bf468eec6c4d846b1e0, type: 2}
 --- !u!4 &677880355
 Transform:
   m_ObjectHideFlags: 0

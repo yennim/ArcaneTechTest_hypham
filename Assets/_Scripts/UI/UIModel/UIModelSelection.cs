@@ -5,8 +5,6 @@ public class UIModelSelection : MonoBehaviour
 {
     [SerializeField] private ButtonModel buttonPrefab;
 
-    [SerializeField] private ModelTypeScriptableObject modelsData;
-
     [SerializeField] private Transform container;
 
     private void Start()
@@ -27,13 +25,17 @@ public class UIModelSelection : MonoBehaviour
     {
         ClearContainer();
 
-        if (modelsData != null)
+        if (ProjectManager.Instance != null && ProjectManager.Instance.ModelsData != null)
         {
-            foreach (ModelTypeStruct model in modelsData.modelTypes)
+            foreach (ModelTypeStruct model in ProjectManager.Instance.ModelsData.modelTypes)
             {
                 ButtonModel button = Instantiate(buttonPrefab, container);
                 button.InitializeButton(model);
             }
+        }
+        else
+        {
+            Debug.LogError("No ProjectManager gameobject or no ModelsData on launch");
         }
     }
 }
