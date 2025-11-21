@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UIModelSelection : MonoBehaviour
 {
-    [SerializeField] private ButtonModel buttonPrefab;
+    [SerializeField] private ButtonDragAndDropModel buttonPrefab;
 
     [SerializeField] private Transform container;
 
@@ -29,7 +29,7 @@ public class UIModelSelection : MonoBehaviour
         {
             foreach (ModelTypeStruct model in ProjectManager.Instance.ModelsData.modelTypes)
             {
-                ButtonModel button = Instantiate(buttonPrefab, container);
+                ButtonDragAndDropModel button = Instantiate(buttonPrefab, container);
                 button.InitializeButton(model);
             }
         }

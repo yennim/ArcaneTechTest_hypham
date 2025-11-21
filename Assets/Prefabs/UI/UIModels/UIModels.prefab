@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5409d22ba9af562439a297dcbcac2a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 5365005355970143840, guid: b5eeb1b453e282044ad51b7b330e5696, type: 3}
+  buttonPrefab: {fileID: 6897205750160429534, guid: b5eeb1b453e282044ad51b7b330e5696, type: 3}
   container: {fileID: 5428112224355567565}
 --- !u!114 &5593615045260141372
 MonoBehaviour:
