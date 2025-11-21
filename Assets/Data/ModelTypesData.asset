@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: ModelTypesData
   m_EditorClassIdentifier: 
   modelTypes:
-  - ModelType: 1
+  - name: Cube
+    ModelType: 1
     Prefab: {fileID: 2521486826500627083, guid: 963f97330eadbdb419e4d832cefe1225, type: 3}
-  - ModelType: 3
+  - name: Sphere
+    ModelType: 3
     Prefab: {fileID: 2521486826500627083, guid: 1a6b90419fd044148b072fb29a1cf995, type: 3}
+  - name: Cylinder
+    ModelType: 4
+    Prefab: {fileID: 2521486826500627083, guid: 4683a2c6e40238e4c91a2558f10ef414, type: 3}

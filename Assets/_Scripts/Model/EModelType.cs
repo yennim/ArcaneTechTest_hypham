@@ -3,5 +3,6 @@
     None,
     Cube,
     Pyramid,
-    Sphere
+    Sphere,
+    Cylinder,
 }

@@ -22,7 +22,7 @@ public class ButtonDragAndDropModel : MonoBehaviour, IBeginDragHandler, IDragHan
         }
 
         Model = modelTypeStruct;
-        text.text = modelTypeStruct.Prefab.gameObject.name;
+        text.text = modelTypeStruct.name;
     }
     public void OnBeginDrag(PointerEventData eventData)
     {

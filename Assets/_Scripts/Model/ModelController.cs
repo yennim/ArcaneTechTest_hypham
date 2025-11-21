@@ -35,6 +35,7 @@ public class ModelController : MonoBehaviour
         isSelected = (modelController == this);
         uiEditModel.gameObject.SetActive(isSelected);
         initialScale = modelObject.transform.localScale;
+        selectedTriangleIndex = -1;
     }
 
     public void SetSelectedFaceIndex(int faceIndex)
@@ -145,9 +146,29 @@ public class ModelController : MonoBehaviour
     #endregion
 
     #region Colour
-    public void SetMaterialColour(Color color)
+    public void SetColor(Color color)
+    {
+        if (selectedTriangleIndex == -1)
+        {
+            Debug.Log("Set material color");
+            SetMaterialColor(color);
+        }
+        else 
+        { 
+            SetFaceColor(color);
+        }
+    }
+
+    private void SetMaterialColor(Color color)
     {
         modelRenderer.material.color = color;
+    }
+
+    private void SetFaceColor(Color color)
+    {
+        // TODO: try again with the logic...
+        Debug.Log("Set face color");
+        SetMaterialColor(color);
     }
 
 }

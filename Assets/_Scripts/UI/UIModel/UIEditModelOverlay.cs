@@ -15,7 +15,7 @@ public class UIEditModelOverlay : MonoBehaviour
     [SerializeField] private TMP_InputField scale_z;
 
     [Header("Colour")]
-    [SerializeField] private GameObject colorSection;
+    [SerializeField] private TextMeshProUGUI colorTarget;
     [SerializeField] private FlexibleColorPicker colorPicker;
 
     private ModelController SelectedController => ProjectManager.Instance.SelectedModel;
@@ -23,7 +23,8 @@ public class UIEditModelOverlay : MonoBehaviour
     private void OnEnable()
     {
         ProjectManager.Instance.OnModelSelected += UpdateCurrentController;
-        ProjectManager.Instance.OnModelFaceIndexSelected += OpenColorPicker;
+        ProjectManager.Instance.OnModelFaceIndexSelected += UpdateColorTargetText;
+        ProjectManager.Instance.OnChangeProject += DeactivateCanvasGroup;
 
         scaleOverall.onValueChanged.AddListener(UpdateModelScaleOverall);
         scale_x.onEndEdit.AddListener(UpdateModelScaleX);
@@ -38,7 +39,8 @@ public class UIEditModelOverlay : MonoBehaviour
         if (ProjectManager.Instance)
         {
             ProjectManager.Instance.OnModelSelected -= UpdateCurrentController;
-            ProjectManager.Instance.OnModelFaceIndexSelected -= OpenColorPicker;
+            ProjectManager.Instance.OnModelFaceIndexSelected -= UpdateColorTargetText;
+            ProjectManager.Instance.OnChangeProject -= DeactivateCanvasGroup;
         }
 
         scaleOverall.onValueChanged.RemoveListener(UpdateModelScaleOverall);
@@ -63,19 +65,15 @@ public class UIEditModelOverlay : MonoBehaviour
         canvasGroup.alpha = 0f;
     }
 
-    private void OpenColorPicker()
+    private void UpdateColorTargetText(int index)
     {
-        Debug.Log("face selected, color picker should activate");
-        colorSection.gameObject.SetActive(true);
-    }
-
-    private void CloseColorPicker()
-    {
-        colorSection.gameObject.SetActive(false);
+        colorTarget.text = $"Selected face from triangle index {index}.";
     }
 
     private void UpdateCurrentController(ModelController modelController)
     {
+        colorTarget.text = "Whole material color selected.";
+
         if (modelController != null)
         {
             scaleOverall.value = 1;
@@ -84,13 +82,16 @@ public class UIEditModelOverlay : MonoBehaviour
             scale_z.text = modelController.GetScaleZ().ToString();
 
             ActivateCanvasGroup();
+
+            if (modelController.Model.Type != EModelType.Sphere)
+            {
+                colorTarget.text += "\nClick again to select a face.";
+            }
         }
         else
         {
             DeactivateCanvasGroup();
         }
-
-        CloseColorPicker();
     }
 
     #region Scaling
@@ -148,7 +149,7 @@ public class UIEditModelOverlay : MonoBehaviour
     private void ChangeColor(Color color)
     {
         //SelectedController.SetSelectedFaceColour(color);
-        SelectedController.SetMaterialColour(color);
+        SelectedController.SetColor(color);
     }
     #endregion
 }

@@ -12,6 +12,7 @@ public class ModelTypeScriptableObject : ScriptableObject
 [Serializable]
 public struct ModelTypeStruct
 {
+    public string name;
     public EModelType ModelType;
     public ModelController Prefab;
 }

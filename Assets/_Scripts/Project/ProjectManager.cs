@@ -42,8 +42,9 @@ public class ProjectManager : MonoBehaviour
         }
     }
 
+    public event Action OnChangeProject;
     public event Action<ModelController> OnModelSelected;
-    public event Action OnModelFaceIndexSelected;
+    public event Action<int> OnModelFaceIndexSelected;
 
     # region LIFECYCLE
     private void Awake()
@@ -104,6 +105,8 @@ public class ProjectManager : MonoBehaviour
         activeModelControllers = new List<ModelController>();
 
         uiProjects.Initialize(projects, currentProject);
+
+        OnChangeProject?.Invoke();
     }
     public void SaveProject()
     {
@@ -150,6 +153,8 @@ public class ProjectManager : MonoBehaviour
                 LoadModel(model);
             }
         }
+
+        OnChangeProject?.Invoke();
     }
 
     public void LoadModel(Model model)
@@ -246,8 +251,6 @@ public class ProjectManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"Targeted nothing");
-
                     SetSelectedModel(null);
                 }
             }
@@ -285,16 +288,9 @@ public class ProjectManager : MonoBehaviour
             {
                 Debug.Log($"index: {index}");
                 SelectedModel.SetSelectedFaceIndex(index);
-                OnModelFaceIndexSelected?.Invoke();
+                OnModelFaceIndexSelected?.Invoke(index);
             }
         }
-        else if (hit.collider is SphereCollider sphereCollider)
-        {
-            // TODO: come back to code specific use case better instead of reusing index calls
-            SelectedModel.SetSelectedFaceIndex(0);
-            OnModelFaceIndexSelected?.Invoke();
-        }
-    }
     }
     #endregion
 

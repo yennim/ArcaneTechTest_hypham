@@ -14,7 +14,7 @@ public class UIModelSelection : MonoBehaviour
 
     private void ClearContainer()
     {
-        for (int i = 0; i < container.childCount; i++)
+        for (int i = 1; i < container.childCount; i++)
         {
             GameObject child = container.GetChild(i).gameObject;
             Destroy(child);
