@@ -14,6 +14,7 @@ public class ProjectManager : MonoBehaviour
     private Camera mainCamera;
     private Project currentProject;
     private ProjectsList projects;
+    private List<ModelController> activeModelControllers;
 
     [SerializeField] private LayerMask modelLayer;
     [SerializeField] private UIProjects uiProjects;
@@ -22,7 +23,7 @@ public class ProjectManager : MonoBehaviour
     [SerializeField] private ModelTypeScriptableObject modelsData;
     public ModelTypeScriptableObject ModelsData { get { return modelsData; } }
 
-    private List<ModelController> activeModelControllers;
+    public ModelController SelectedModel { get; private set; }
 
     // I decided to only consider one project at a time, no multiple tabs to edit projects. Makes it easier to find the instance.
     private static ProjectManager instance;
@@ -42,6 +43,7 @@ public class ProjectManager : MonoBehaviour
     }
 
     public event Action<ModelController> OnModelSelected;
+    public event Action OnModelFaceIndexSelected;
 
     # region LIFECYCLE
     private void Awake()
@@ -95,37 +97,7 @@ public class ProjectManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) 
-        {
-            if (EventSystem.current.IsPointerOverGameObject())
-            { 
-                return; 
-            }
-            else
-            {
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 1000f, modelLayer)) 
-                {
-                    Debug.Log($"Selected gameobject : {hit.collider.gameObject.name}");
-
-                    ModelController selectedModel = hit.collider.gameObject.GetComponentInParent<ModelController>();
-
-                    if (selectedModel)
-                    {
-                        SetSelectedModel(selectedModel);
-                    }
-                }
-                else
-                {
-                    Debug.Log($"Targeted nothing");
-
-                    SetSelectedModel(null);
-                }
-            }
-        }
+        HandleClickRaycast();
     }
     #endregion
 
@@ -222,8 +194,20 @@ public class ProjectManager : MonoBehaviour
 
     public void AddModel(ModelTypeStruct modelType)
     {
-        // TODO : handle edge case to add the component if not found
         ModelController modelController = Instantiate(modelType.Prefab, modelsContainer);
+        Model model = new Model(modelType.ModelType);
+
+        modelController.Initialize(model);
+        currentProject.Models.Add(model);
+
+        activeModelControllers.Add(modelController);
+    }
+
+    public void AddModel(ModelTypeStruct modelType, Vector3 position)
+    {
+        ModelController modelController = Instantiate(modelType.Prefab, position, Quaternion.identity, modelsContainer);
+        modelController.transform.localRotation = Quaternion.identity; // because I set up the room with a rotation at first
+
         Model model = new Model(modelType.ModelType);
 
         modelController.Initialize(model);
@@ -234,7 +218,74 @@ public class ProjectManager : MonoBehaviour
 
     public void SetSelectedModel(ModelController modelController)
     {
+        SelectedModel = modelController;
         OnModelSelected?.Invoke(modelController);
+    }
+
+    private void HandleClickRaycast()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+            else
+            {
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 1000f, modelLayer))
+                {
+                    Debug.Log($"Selected gameobject : {hit.collider.gameObject.name}");
+
+                    HandleSelectModelOrFace(hit);
+                }
+                else
+                {
+                    Debug.Log($"Targeted nothing");
+
+                    SetSelectedModel(null);
+                }
+            }
+        }
+    }
+
+    private void HandleSelectModelOrFace(RaycastHit hit)
+    {
+        ModelController selectedModel = hit.collider.gameObject.GetComponentInParent<ModelController>();
+
+        if (selectedModel)
+        {
+            if (selectedModel == SelectedModel)
+            {
+                HandleSelectFace(hit);
+            }
+            else
+            {
+                SetSelectedModel(selectedModel);
+            }
+        }
+    }
+
+    private void HandleSelectFace(RaycastHit hit)
+    {
+        if (hit.collider is MeshCollider meshCollider && !meshCollider.convex)
+        {
+            Debug.Log($"collider is mesh and not convex");
+            int index = hit.triangleIndex;
+            if (index < 0)
+            {
+                Debug.Log("triagle index not found");
+            }
+            else
+            {
+                Debug.Log($"index: {index}");
+                SelectedModel.SetSelectedFaceIndex(index);
+                OnModelFaceIndexSelected?.Invoke();
+            }
+        }
     }
     #endregion
 

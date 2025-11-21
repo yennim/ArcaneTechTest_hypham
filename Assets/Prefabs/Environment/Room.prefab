@@ -112,6 +112,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4988273603790445606, guid: 4e8e013153aa1194289638144cc31cdf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7647767244703396351, guid: 4e8e013153aa1194289638144cc31cdf, type: 3}
       propertyPath: m_Name
       value: WallsAndFloor

@@ -6,7 +6,9 @@ public class ModelController : MonoBehaviour
 {
     private bool isSelected;
     private Renderer modelRenderer;
+    private Mesh mesh;
     private Vector3 initialScale;
+    private int selectedTriangleIndex = -1;
 
     [SerializeField] private GameObject modelObject;
     [SerializeField] private UIEditModel uiEditModel;
@@ -35,23 +37,42 @@ public class ModelController : MonoBehaviour
         initialScale = modelObject.transform.localScale;
     }
 
+    public void SetSelectedFaceIndex(int faceIndex)
+    {
+        selectedTriangleIndex = faceIndex;
+    }
+
     public void Initialize(Model model)
     {
         Model = model;
-        modelRenderer = GetComponent<Renderer>();
+        modelRenderer = modelObject.GetComponent<Renderer>();
+        MeshFilter meshFilter = modelObject.GetComponent<MeshFilter>();
+        if (meshFilter)
+        {
+            mesh = meshFilter.mesh;
+        }
     }
 
     public void Load(Model model)
     {
-        modelRenderer = GetComponent<Renderer>();
-
+        modelRenderer = modelObject.GetComponent<Renderer>();
+        
         transform.localPosition = model.Position;
         transform.localRotation = model.Rotation;
         transform.localScale = model.Scale;
 
+        modelRenderer.material.color = model.Color.ConvertToUnityColor();
+
+        /*
+        MeshFilter meshFilter = modelObject.GetComponent<MeshFilter>();
+        if (meshFilter)
+        {
+            mesh = meshFilter.mesh;
+        }
         for (int i = 0; i < model.IndexedColors.Count && i < modelRenderer.materials.Length; i++) {
             modelRenderer.materials[i].SetColor("_Color",  model.IndexedColors[i].ConvertToUnityColor());
         }
+        */
     }
 
     public void RefreshModel()
@@ -60,6 +81,7 @@ public class ModelController : MonoBehaviour
         Model.Rotation = transform.localRotation;
         Model.Scale = transform.localScale;
         Model.IndexedColors = GetCurrentIndexedColors();
+        Model.Color = new SerializableColor(modelRenderer.material.color);
     }
 
     public List<SerializableColor> GetCurrentIndexedColors()
@@ -75,7 +97,7 @@ public class ModelController : MonoBehaviour
         return indexedColors;
     }
 
-    #region EDIT
+    #region SCALE
     public void UpdateLocalScale(Vector3 newLocalScale)
     {
         modelObject.transform.localScale = newLocalScale;
@@ -121,4 +143,11 @@ public class ModelController : MonoBehaviour
         initialScale = modelObject.transform.localScale;
     }
     #endregion
+
+    #region Colour
+    public void SetMaterialColour(Color color)
+    {
+        modelRenderer.material.color = color;
+    }
+
 }

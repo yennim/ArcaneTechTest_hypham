@@ -15,6 +15,7 @@ public class Model
     public Quaternion Rotation;
     public Vector3 Scale;
     public List<SerializableColor> IndexedColors;
+    public SerializableColor Color;
     public Model(EModelType type)
     {
         id = Guid.NewGuid().ToString();

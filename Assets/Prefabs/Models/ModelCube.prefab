@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 8821323240344318881}
   - component: {fileID: 5445462241279253402}
   - component: {fileID: 475599626292974558}
-  - component: {fileID: 5084776302681591320}
+  - component: {fileID: 4771537452673530013}
   - component: {fileID: 2927852309367061056}
   m_Layer: 6
   m_Name: Cube
@@ -136,8 +136,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5084776302681591320
-BoxCollider:
+--- !u!64 &4771537452673530013
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -154,9 +154,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &2927852309367061056
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -180,7 +181,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
@@ -274,7 +275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7236918879032363884, guid: b1515809e86f3914ab154b0a6e8de312, type: 3}
       propertyPath: m_Name
-      value: ModelEditUI
+      value: ModelEditUI_ProbablyDELETE
       objectReference: {fileID: 0}
     - target: {fileID: 8904945465604149462, guid: b1515809e86f3914ab154b0a6e8de312, type: 3}
       propertyPath: m_PresetInfoIsWorld

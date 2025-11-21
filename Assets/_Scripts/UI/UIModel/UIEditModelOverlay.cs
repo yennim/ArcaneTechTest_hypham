@@ -1,26 +1,35 @@
 using System;
 using TMPro;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIEditModelOverlay : MonoBehaviour
 {
-    [Header("Scaling")]
     [SerializeField] private CanvasGroup canvasGroup;
+
+    [Header("Scaling")]
     [SerializeField] private Slider scaleOverall;
     [SerializeField] private TMP_InputField scale_x;
     [SerializeField] private TMP_InputField scale_y;
     [SerializeField] private TMP_InputField scale_z;
 
-    private ModelController currentController;
+    [Header("Colour")]
+    [SerializeField] private FlexibleColorPicker colorPicker;
+
+    private ModelController SelectedController => ProjectManager.Instance.SelectedModel;
    
     private void OnEnable()
     {
         ProjectManager.Instance.OnModelSelected += UpdateCurrentController;
+        ProjectManager.Instance.OnModelFaceIndexSelected += OpenColorPicker;
+
         scaleOverall.onValueChanged.AddListener(UpdateModelScaleOverall);
         scale_x.onValueChanged.AddListener(UpdateModelScaleX);
         scale_y.onValueChanged.AddListener(UpdateModelScaleY);
         scale_z.onValueChanged.AddListener(UpdateModelScaleZ);
+
+        colorPicker.onColorChange.AddListener(ChangeColor);
     }
 
     private void OnDisable()
@@ -28,11 +37,15 @@ public class UIEditModelOverlay : MonoBehaviour
         if (ProjectManager.Instance)
         {
             ProjectManager.Instance.OnModelSelected -= UpdateCurrentController;
+            ProjectManager.Instance.OnModelFaceIndexSelected -= OpenColorPicker;
         }
+
         scaleOverall.onValueChanged.RemoveListener(UpdateModelScaleOverall);
         scale_x.onValueChanged.RemoveListener(UpdateModelScaleX);
         scale_y.onValueChanged.RemoveListener(UpdateModelScaleY);
         scale_z.onValueChanged.RemoveListener(UpdateModelScaleZ);
+
+        colorPicker.onColorChange.RemoveListener(ChangeColor);
     }
 
     private void ActivateCanvasGroup()
@@ -49,15 +62,25 @@ public class UIEditModelOverlay : MonoBehaviour
         canvasGroup.alpha = 0f;
     }
 
+    private void OpenColorPicker()
+    {
+        Debug.Log("face selected, color picker should activate");
+        colorPicker.gameObject.SetActive(true);
+    }
+
+    private void CloseColorPicker()
+    {
+        colorPicker.gameObject.SetActive(false);
+    }
+
     private void UpdateCurrentController(ModelController modelController)
     {
         if (modelController != null)
         {
-            currentController = modelController;
             scaleOverall.value = 1;
-            scale_x.text = currentController.GetScaleX().ToString();
-            scale_y.text = currentController.GetScaleY().ToString();
-            scale_z.text = currentController.GetScaleZ().ToString();
+            scale_x.text = modelController.GetScaleX().ToString();
+            scale_y.text = modelController.GetScaleY().ToString();
+            scale_z.text = modelController.GetScaleZ().ToString();
 
             ActivateCanvasGroup();
         }
@@ -65,51 +88,63 @@ public class UIEditModelOverlay : MonoBehaviour
         {
             DeactivateCanvasGroup();
         }
+
+        CloseColorPicker();
     }
 
-    public void UpdateModelScaleOverall(float multiplier)
+    #region Scaling
+    private void UpdateModelScaleOverall(float multiplier)
     {
-        currentController.UpdateScaleOverall(multiplier);
+        SelectedController.UpdateScaleOverall(multiplier);
     }
 
-    public void UpdateModelScaleX(string scaleX) 
+    private void UpdateModelScaleX(string scaleX) 
     {
         float parsedScale;
         if (float.TryParse(scaleX, out parsedScale))
         {
-            currentController.UpdateScaleX(parsedScale);
+            SelectedController.UpdateScaleX(parsedScale);
         }
         else
         {
-            scale_x.text = currentController.GetScaleX().ToString();
+            scale_x.text = SelectedController.GetScaleX().ToString();
             Debug.Log("Value of input X cannot be parsed as a float");
         }
     }
 
-    public void UpdateModelScaleY(string scaleY)
+    private void UpdateModelScaleY(string scaleY)
     {
         float parsedScale;
         if (float.TryParse(scaleY, out parsedScale))
         {
-            currentController.UpdateScaleY(parsedScale);
+            SelectedController.UpdateScaleY(parsedScale);
         }
         else
         {
-            scale_y.text = currentController.GetScaleY().ToString();
+            scale_y.text = SelectedController.GetScaleY().ToString();
             Debug.Log("Value of input Y cannot be parsed as a float");
         }
     }
-    public void UpdateModelScaleZ(string scaleZ)
+    private void UpdateModelScaleZ(string scaleZ)
     {
         float parsedScale;
         if (float.TryParse(scaleZ, out parsedScale))
         {
-            currentController.UpdateScaleZ(parsedScale);
+            SelectedController.UpdateScaleZ(parsedScale);
         }
         else
         {
-            scale_z.text = currentController.GetScaleZ().ToString();
+            scale_z.text = SelectedController.GetScaleZ().ToString();
             Debug.Log("Value of input Z cannot be parsed as a float");
         }
     }
+    #endregion
+
+    #region Colour
+    private void ChangeColor(Color color)
+    {
+        //SelectedController.SetSelectedFaceColour(color);
+        SelectedController.SetMaterialColour(color);
+    }
+    #endregion
 }
