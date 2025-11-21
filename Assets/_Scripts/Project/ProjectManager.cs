@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static TreeEditor.TreeEditorHelper;
 
 public class ProjectManager : MonoBehaviour
@@ -9,9 +11,11 @@ public class ProjectManager : MonoBehaviour
     private const string SAVE_PATH = "/savedProjects.json";
     private const string NEW_PROJECT_NAME = "New Project";
 
+    private Camera mainCamera;
     private Project currentProject;
     private ProjectsList projects;
 
+    [SerializeField] private LayerMask modelLayer;
     [SerializeField] private UIProjects uiProjects;
     [SerializeField] private Transform modelsContainer;
 
@@ -21,7 +25,21 @@ public class ProjectManager : MonoBehaviour
     private List<ModelController> activeModelControllers;
 
     // I decided to only consider one project at a time, no multiple tabs to edit projects. Makes it easier to find the instance.
-    public static ProjectManager Instance { get; private set; }
+    private static ProjectManager instance;
+    public static ProjectManager Instance {
+        get
+        {
+            if (instance == null)
+            {
+                instance = (ProjectManager) FindObjectsByType(typeof(ProjectManager), FindObjectsSortMode.None).FirstOrDefault();
+            }
+            return instance;
+        }
+        private set
+        {
+            instance = value;
+        }
+    }
 
     public event Action<ModelController> OnModelSelected;
 
@@ -33,7 +51,7 @@ public class ProjectManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if (Instance == this)
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
@@ -41,6 +59,13 @@ public class ProjectManager : MonoBehaviour
 
     void Start()
     {
+        mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main Camera not found. Please tag a camera as 'MainCamera'.");
+            enabled = false;
+        }
+
         Debug.Log(Application.persistentDataPath + SAVE_PATH);
         string path = Application.persistentDataPath + SAVE_PATH;
         if (File.Exists(path))
@@ -66,6 +91,41 @@ public class ProjectManager : MonoBehaviour
 
         Debug.Log(projects.list.Count);
         uiProjects.Initialize(projects, currentProject);
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+            { 
+                return; 
+            }
+            else
+            {
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 1000f, modelLayer)) 
+                {
+                    Debug.Log($"Selected gameobject : {hit.collider.gameObject.name}");
+
+                    ModelController selectedModel = hit.collider.gameObject.GetComponentInParent<ModelController>();
+
+                    if (selectedModel)
+                    {
+                        SetSelectedModel(selectedModel);
+                    }
+                }
+                else
+                {
+                    Debug.Log($"Targeted nothing");
+
+                    SetSelectedModel(null);
+                }
+            }
+        }
     }
     #endregion
 
@@ -154,7 +214,7 @@ public class ProjectManager : MonoBehaviour
     #endregion
 
     #region PROJECT EDITING
-    // Called on EditableText.nputField OnClick. TODO: improve not referencing directly in editor?
+    // Called by on EditableText.InputField OnClick inspector. TODO: improve not referencing directly in editor?
     public void EditProjectName(string name)
     {
         currentProject.Name = name;

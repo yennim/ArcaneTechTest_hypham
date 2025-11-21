@@ -30,6 +30,4 @@ public class Model
         Scale = scale;
         IndexedColors = indexedColors;
     }
-
-    
 }

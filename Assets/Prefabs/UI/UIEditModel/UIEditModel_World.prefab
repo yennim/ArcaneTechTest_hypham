@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 4375054643110805301}
   - component: {fileID: 6779740707966505389}
   m_Layer: 0
-  m_Name: ModelEditUI
+  m_Name: UIEditModel_World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +313,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4375054643110805301
 MonoBehaviour:
   m_ObjectHideFlags: 0
