@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class ProjectManager : MonoBehaviour
 {
     private const string SAVE_PATH = "/savedProjects.json";
-    private const string NEW_PROJECT_NAME = "New Project";
+    private const string NEW_PROJECT_NAME = "My Project";
 
     private Camera mainCamera;
     private Project currentProject;
@@ -175,9 +175,9 @@ public class ProjectManager : MonoBehaviour
 
             // TODO : handle edge case to add the component if not found
             ModelController modelController = Instantiate(prefab, modelsContainer);
-            modelController.Load(model);
 
             modelController.Initialize(model);
+            modelController.Load(model);
 
             activeModelControllers.Add(modelController);
         }
@@ -221,6 +221,14 @@ public class ProjectManager : MonoBehaviour
         currentProject.Models.Add(model);
 
         activeModelControllers.Add(modelController);
+    }
+
+    public void DeleteSelectedModel()
+    {
+        currentProject.Models.Remove(SelectedModel.Model);
+        activeModelControllers.Remove(SelectedModel);
+        Destroy(SelectedModel.gameObject);
+        SetSelectedModel(null);
     }
 
     public void SetSelectedModel(ModelController modelController)

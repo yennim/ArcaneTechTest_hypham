@@ -1,6 +1,4 @@
-using System;
 using TMPro;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -154,4 +152,9 @@ public class UIEditModelOverlay : MonoBehaviour
         SelectedController.SetColor(color);
     }
     #endregion
+
+    public void DeleteModel()
+    {
+        ProjectManager.Instance.DeleteSelectedModel();
+    }
 }

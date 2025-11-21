@@ -21,7 +21,7 @@ public class Project
             }
             else 
             {
-                name = "New Project";
+                name = "My Project";
             }
         }
     }
