@@ -30,18 +30,19 @@ Les objectifs de base de l'éditeur ont été atteints :
 | Fonctionnalité | Justification de la Décision |
 | :--- | :--- |
 | **Modèles 3D** | Utilisation des **Primitives Unity** pour la majorité. J'ai conservé une tentative de génération de `Mesh` pour la Pyramide, même si son résultat est **imparfait** (artefacts visuels possibles). |
-| **Couleur par Face** | Simplifiée en **coloration totale de l'objet**. Après des tentatives non concluantes avec les index de triangles (potentiel problème de shader), j'ai opté pour le *fallback* afin de ne pas risquer de perdre du temps qui serait bénéfique aux autres fonctionnalités. J'ai laissé tout de même le code qui récupérait le triangleIndex sélectionné, j'ai laissé cet index affiché lorsque l'on clique deux fois sur un objet. Je ne sais pas si c'était un problème de shader ou de logique dans ce que j'avais essayé. |
-| **Contrôle d'Échelle** | Le Slider d'échelle uniforme n'a pas de limite dynamique (détection de collision maximale), ce que j'aurais aimé ajouter pour éviter que le scaling ne finisse par faire overlapper des objets déjà positionnés mais je ne m'y suis pas rendue dans ma priorisation. |
-| **Placement d'objets** | J'ai utilisé le system d'input legacy car j'y étais plus familière que le nouveau qui m'aurait pris du temps a prendre en main. J'ai implémenté une vérification pour annuler le placement d'un objet s'il est superposé avec un autre, mais cette vérification n'est pas faite avec les murs (je viens d'y penser maintenant en rédigeant ce readme). |
+| **Couleur par Face** | Simplifiée en **coloration totale de l'objet**. Après des tentatives non concluantes avec les index de triangles, j'ai opté pour le *fallback* pour allouer du temps aux autres fonctionnalités. J'ai laissé le code qui récupérait le triangleIndex. Je ne sais pas si c'était un problème de shader ou de logique dans ce que j'avais essayé. |
+| **Placement d'objets** | J'ai utilisé le system d'input legacy car j'y étais plus familière. J'ai ajouté une vérification pour annuler le placement d'un objet s'il est superposé avec un autre. |
 | **Gestion de la physique** | Dans le contexte d'un editeur permettant de placer des objets dans l'espace, j'ai pensé qu'on voudrait contraindre les mouvements des objets pour ne pas qu'ils soient poussés ou déplacés sans l'interaction explicite de l'utilisateur. |
-| **Déplacer un objet** | La fonctionnalité de **déplacement direct (`Move`)** d'un modèle après son instanciation n'a pas été implémentée, car je l'avais placé plus tard dans les priorisations (car ce n'était pas parmi requis explicites) et je ne m'y suis pas rendue. |
+| **Déplacer un objet** | La fonctionnalité de **déplacement direct (`Move`)** d'un modèle après son instanciation n'a pas été implémentée, car je l'avais placé plus tard dans les priorisations (car pas parmi les requis explicites) et je ne m'y suis pas rendue. |
 
 ---
 
 ### IV. Bug majeur détecté avant la remise
 
 Je ne connais pas les étapes de reproduction exactes, je crois que c'est le fait de loader un projet existant, et peut-être que le premier objet sélectionné est affecté?
+
 Le bug en question est que parfois, le fait de **sélectionner un objet le fait disparaître visuellement** bien qu'il soit encore dans la hiérarchie. Peut-être lié aux meshes ou quelque chose du genre, et ça reste invisible si je resélectionne un autre projet puis reviens dessus. Mais je n'ai pas eu plus de temps pour m'y pencher...
+
 Il semble possible de sélectionner un autre objet du projet juste après par contre et même de le sauvegarder.
 
 ---
@@ -50,8 +51,8 @@ Il semble possible de sélectionner un autre objet du projet juste après par co
 
 J'ai travaillé sur le projet en suivant le processus suivant:
 
-* **Planification : ** J'ai fait une liste de tâches associées aux requis, en créant certaines tâches en étapes MVP vs amélioration. J'ai priorisé ces tâches en partant initialement avec l'idée de faire une version minimale de toutes les fonctionnalités, puis de faire une itération plus acceptable par la suite. Suivant cette priorisation, tout ce qui est intégration de UI esthétique était très bas dans les priorités.
-* **Diagramme : ** J'ai élaboré des drafts de diagrammes pour savoir par où commencer, notamment en commençant par clarifier les classes de Model vs ModelController et de Project vs ProjectController pour m'assurer de la fonctionnalité de sauvegarde. L'implémentation finale ne suit pas à la lettre ces diagrammes comme le temps était limité, ces diagrammes ont servi à me lancer.
+* **Planification :** J'ai priorisé les tâches en partant initialement avec l'idée de faire une version minimale de toutes les fonctionnalités, puis de faire une itération plus acceptable par la suite.
+* **Diagramme :** J'ai élaboré des drafts de diagrammes pour savoir par où commencer, notamment en commençant par clarifier les classes de Model vs ModelController et de Project vs ProjectController pour m'assurer de la fonctionnalité de sauvegarde. L'implémentation finale ne suit pas à la lettre ces diagrammes comme le temps était limité, ces diagrammes ont servi à me lancer.
 * **Implémentation des classes** 
 * **Intégration des menus UI barebone, séparés en 3 sous-UI (prefab). Instanciation par clic à une position.**
 * **Sauvegarde/chargement**
