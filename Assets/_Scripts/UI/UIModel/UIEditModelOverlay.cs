@@ -81,6 +81,8 @@ public class UIEditModelOverlay : MonoBehaviour
             scale_y.text = modelController.GetScaleY().ToString();
             scale_z.text = modelController.GetScaleZ().ToString();
 
+            modelController.RefreshModelHeight();
+
             ActivateCanvasGroup();
 
             if (modelController.Model.Type != EModelType.Sphere)

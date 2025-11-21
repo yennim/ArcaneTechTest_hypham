@@ -22,3 +22,6 @@ MonoBehaviour:
   - name: Cylinder
     ModelType: 4
     Prefab: {fileID: 2521486826500627083, guid: 4683a2c6e40238e4c91a2558f10ef414, type: 3}
+  - name: Pyramid
+    ModelType: 2
+    Prefab: {fileID: 1222443645644805754, guid: dda69502c4e66694d9cdee25cfeed188, type: 3}
