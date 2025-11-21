@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 531c3cad356cd47408bf2c78ef733328, type: 3}
-  m_Name: ModelTypes
+  m_Name: ModelTypesData
   m_EditorClassIdentifier: 
   modelTypes:
   - ModelType: 1
-    Prefab: {fileID: -4111076411505826211, guid: 133c7cde1d8408c43aa2225ff6a70114, type: 3}
+    Prefab: {fileID: 2521486826500627083, guid: 963f97330eadbdb419e4d832cefe1225, type: 3}
+  - ModelType: 3
+    Prefab: {fileID: 2521486826500627083, guid: 1a6b90419fd044148b072fb29a1cf995, type: 3}

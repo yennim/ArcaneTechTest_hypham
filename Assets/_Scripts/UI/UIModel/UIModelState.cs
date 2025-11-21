@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UIEditModel : MonoBehaviour
+public class UIModelState : MonoBehaviour
 {
     private Transform mainCameraTransform;
     void OnEnable()

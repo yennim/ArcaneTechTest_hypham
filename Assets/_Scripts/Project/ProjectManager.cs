@@ -88,11 +88,7 @@ public class ProjectManager : MonoBehaviour
             projects = new ProjectsList();
         }
 
-        currentProject = new Project(NEW_PROJECT_NAME);
-        activeModelControllers = new List<ModelController>();
-
-        Debug.Log(projects.list.Count);
-        uiProjects.Initialize(projects, currentProject);
+        StartNewProject();
     }
 
     private void Update()
@@ -102,6 +98,13 @@ public class ProjectManager : MonoBehaviour
     #endregion
 
     #region SAVE & LOAD
+    public void StartNewProject()
+    {
+        currentProject = new Project(NEW_PROJECT_NAME);
+        activeModelControllers = new List<ModelController>();
+
+        uiProjects.Initialize(projects, currentProject);
+    }
     public void SaveProject()
     {
         foreach (ModelController controller in activeModelControllers)
@@ -135,7 +138,7 @@ public class ProjectManager : MonoBehaviour
     public void LoadProjectById(string id)
     {
         currentProject = projects.list.Find(p => p.Id == id);
-        uiProjects.RefreshCurrentProjectName(currentProject.Name);
+        uiProjects.EditCurrentProjectName(currentProject.Name);
         activeModelControllers = new List<ModelController>();
 
         ClearContainer(modelsContainer);
@@ -186,7 +189,6 @@ public class ProjectManager : MonoBehaviour
     #endregion
 
     #region PROJECT EDITING
-    // Called by on EditableText.InputField OnClick inspector. TODO: improve not referencing directly in editor?
     public void EditProjectName(string name)
     {
         currentProject.Name = name;
@@ -286,6 +288,13 @@ public class ProjectManager : MonoBehaviour
                 OnModelFaceIndexSelected?.Invoke();
             }
         }
+        else if (hit.collider is SphereCollider sphereCollider)
+        {
+            // TODO: come back to code specific use case better instead of reusing index calls
+            SelectedModel.SetSelectedFaceIndex(0);
+            OnModelFaceIndexSelected?.Invoke();
+        }
+    }
     }
     #endregion
 

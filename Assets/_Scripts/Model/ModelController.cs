@@ -11,7 +11,7 @@ public class ModelController : MonoBehaviour
     private int selectedTriangleIndex = -1;
 
     [SerializeField] private GameObject modelObject;
-    [SerializeField] private UIEditModel uiEditModel;
+    [SerializeField] private UIModelState uiEditModel;
 
     // TODO: secure access
     public Model Model { get; private set; }
