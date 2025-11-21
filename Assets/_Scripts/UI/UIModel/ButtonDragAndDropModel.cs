@@ -9,7 +9,7 @@ public class ButtonDragAndDropModel : MonoBehaviour, IBeginDragHandler, IDragHan
     [SerializeField] private float previewFloatingDistance = 11f;
 
     private Camera mainCamera;
-    private GameObject modelPreview;
+    private ModelController modelPreview;
 
     public ModelTypeStruct Model { get; private set; }
     
@@ -42,12 +42,12 @@ public class ButtonDragAndDropModel : MonoBehaviour, IBeginDragHandler, IDragHan
     {
         if (modelPreview)
         {
-            modelPreview.SetActive(true);
+            modelPreview.gameObject.SetActive(true);
             modelPreview.transform.position = position;
         }
         else
         {
-            modelPreview = Instantiate(Model.Prefab.gameObject, position, new Quaternion(0, 0.382683426f, 0, 0.923879564f)); // ugly but copied from inspector        
+            modelPreview = Instantiate(Model.Prefab, position, new Quaternion(0, 0.382683426f, 0, 0.923879564f)); // ugly but copied from inspector        
         }
     }
 
@@ -74,9 +74,16 @@ public class ButtonDragAndDropModel : MonoBehaviour, IBeginDragHandler, IDragHan
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, droppableLayerMasks))
         {
-            ProjectManager.Instance.AddModel(Model, hit.point);
+            if (!modelPreview.IsOverlapping())
+            {
+                ProjectManager.Instance.AddModel(Model, hit.point);
+            }
+            else
+            {
+                Debug.LogError("overlapping ! Cancelling the object.");
+            }
         }
 
-        modelPreview.SetActive(false);
+        modelPreview.gameObject.SetActive(false);
     }
 }

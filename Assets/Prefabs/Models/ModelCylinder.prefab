@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3632332598721359296}
   - component: {fileID: 5603053948311536957}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BoxColliderForBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

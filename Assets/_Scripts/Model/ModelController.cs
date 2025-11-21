@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class ModelController : MonoBehaviour
@@ -14,8 +13,8 @@ public class ModelController : MonoBehaviour
 
     [SerializeField] private GameObject modelObject;
     [SerializeField] private UIModelState uiEditModel;
+    [SerializeField] private LayerMask overlapLayerMask;
 
-    // TODO: secure access
     public Model Model { get; private set; }
 
     private void OnEnable()
@@ -39,6 +38,46 @@ public class ModelController : MonoBehaviour
             modelCollider = modelObject.GetComponentInChildren<BoxCollider>();
         }
     }
+
+    public bool IsOverlapping()
+    {
+        if (modelCollider == null)
+        {                
+            modelCollider = modelObject.GetComponentInChildren<BoxCollider>();
+            if (modelCollider == null)
+            {
+                Debug.LogError("Overlap check failed: no box collider");
+                return false;
+            }
+        }
+
+        Vector3 center = transform.position;
+        Vector3 extents = modelCollider.bounds.extents;
+
+        Collider[] results = new Collider[5];
+
+        int numColliders = Physics.OverlapBoxNonAlloc(
+            center,
+            extents,
+            results,
+            transform.rotation,
+            overlapLayerMask
+        );
+
+        if (numColliders > 0)
+        {
+            for (int i = 0; i < numColliders; i++)
+            {
+                if (results[i] != null && results[i].transform.root.gameObject != this.gameObject)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void RefreshSelectedState(ModelController modelController)
     {
         isSelected = (modelController == this);
@@ -57,6 +96,7 @@ public class ModelController : MonoBehaviour
         Model = model;
         modelRenderer = modelObject.GetComponent<Renderer>();
         MeshFilter meshFilter = modelObject.GetComponent<MeshFilter>();
+        
         if (meshFilter)
         {
             mesh = meshFilter.mesh;

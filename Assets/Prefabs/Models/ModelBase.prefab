@@ -47,6 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modelObject: {fileID: 0}
   uiEditModel: {fileID: 6672934653533570256}
+  overlapLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1001 &183940558595167613
 PrefabInstance:
   m_ObjectHideFlags: 0

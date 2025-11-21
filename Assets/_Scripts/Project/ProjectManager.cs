@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static TreeEditor.TreeEditorHelper;
 
 public class ProjectManager : MonoBehaviour
 {
