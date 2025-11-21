@@ -120,11 +120,16 @@ public class ModelController : MonoBehaviour
 
     public void Load(Model model)
     {
+        if (modelObject == null)
+        {
+            Debug.LogError("Prefab did not set model object !");
+        }
         modelRenderer = modelObject.GetComponent<Renderer>();
         
         transform.localPosition = model.Position;
+        modelObject.transform.localPosition = model.ChildPosition;
         transform.localRotation = model.Rotation;
-        transform.localScale = model.Scale;
+        modelObject.transform.localScale = model.Scale;
 
         modelRenderer.material.color = model.Color.ConvertToUnityColor();
 
@@ -143,8 +148,9 @@ public class ModelController : MonoBehaviour
     public void RefreshModel()
     {
         Model.Position = transform.localPosition;
+        Model.ChildPosition = modelObject.transform.localPosition;
         Model.Rotation = transform.localRotation;
-        Model.Scale = transform.localScale;
+        Model.Scale = modelObject.transform.localScale;
         Model.IndexedColors = GetCurrentIndexedColors();
         Model.Color = new SerializableColor(modelRenderer.material.color);
     }
@@ -199,13 +205,9 @@ public class ModelController : MonoBehaviour
 
     public void UpdateScaleY(float newScaleY)
     {
-        Debug.LogError($"[UpdateScaleY] Before change HALF HEIGHT: {modelHalfHeight}");
-
         modelObject.transform.localScale = new Vector3(modelObject.transform.localScale.x, newScaleY, modelObject.transform.localScale.z);
         RefreshModelHeight();
 
-        Debug.LogError($"[UpdateScaleY] NEW SCALE Y: {newScaleY}");
-        Debug.LogError($"[UpdateScaleY] CALCULATED HALF HEIGHT: {modelHalfHeight}");
         modelObject.transform.localPosition = new Vector3(modelObject.transform.localPosition.x, modelHalfHeight, modelObject.transform.localPosition.z);
         initialScale = modelObject.transform.localScale;
     }
@@ -242,5 +244,5 @@ public class ModelController : MonoBehaviour
         Debug.Log("Set face color");
         SetMaterialColor(color);
     }
-
+    #endregion
 }
