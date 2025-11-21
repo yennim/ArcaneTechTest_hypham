@@ -15,6 +15,7 @@ public class UIEditModelOverlay : MonoBehaviour
     [SerializeField] private TMP_InputField scale_z;
 
     [Header("Colour")]
+    [SerializeField] private GameObject colorSection;
     [SerializeField] private FlexibleColorPicker colorPicker;
 
     private ModelController SelectedController => ProjectManager.Instance.SelectedModel;
@@ -25,9 +26,9 @@ public class UIEditModelOverlay : MonoBehaviour
         ProjectManager.Instance.OnModelFaceIndexSelected += OpenColorPicker;
 
         scaleOverall.onValueChanged.AddListener(UpdateModelScaleOverall);
-        scale_x.onValueChanged.AddListener(UpdateModelScaleX);
-        scale_y.onValueChanged.AddListener(UpdateModelScaleY);
-        scale_z.onValueChanged.AddListener(UpdateModelScaleZ);
+        scale_x.onEndEdit.AddListener(UpdateModelScaleX);
+        scale_y.onEndEdit.AddListener(UpdateModelScaleY);
+        scale_z.onEndEdit.AddListener(UpdateModelScaleZ);
 
         colorPicker.onColorChange.AddListener(ChangeColor);
     }
@@ -41,9 +42,9 @@ public class UIEditModelOverlay : MonoBehaviour
         }
 
         scaleOverall.onValueChanged.RemoveListener(UpdateModelScaleOverall);
-        scale_x.onValueChanged.RemoveListener(UpdateModelScaleX);
-        scale_y.onValueChanged.RemoveListener(UpdateModelScaleY);
-        scale_z.onValueChanged.RemoveListener(UpdateModelScaleZ);
+        scale_x.onEndEdit.RemoveListener(UpdateModelScaleX);
+        scale_y.onEndEdit.RemoveListener(UpdateModelScaleY);
+        scale_z.onEndEdit.RemoveListener(UpdateModelScaleZ);
 
         colorPicker.onColorChange.RemoveListener(ChangeColor);
     }
@@ -65,12 +66,12 @@ public class UIEditModelOverlay : MonoBehaviour
     private void OpenColorPicker()
     {
         Debug.Log("face selected, color picker should activate");
-        colorPicker.gameObject.SetActive(true);
+        colorSection.gameObject.SetActive(true);
     }
 
     private void CloseColorPicker()
     {
-        colorPicker.gameObject.SetActive(false);
+        colorSection.gameObject.SetActive(false);
     }
 
     private void UpdateCurrentController(ModelController modelController)
@@ -96,6 +97,9 @@ public class UIEditModelOverlay : MonoBehaviour
     private void UpdateModelScaleOverall(float multiplier)
     {
         SelectedController.UpdateScaleOverall(multiplier);
+        scale_x.text = SelectedController.GetScaleX().ToString();
+        scale_y.text = SelectedController.GetScaleY().ToString();
+        scale_z.text = SelectedController.GetScaleZ().ToString();
     }
 
     private void UpdateModelScaleX(string scaleX) 
