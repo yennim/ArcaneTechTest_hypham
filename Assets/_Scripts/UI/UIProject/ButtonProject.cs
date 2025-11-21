@@ -12,13 +12,14 @@ public class ButtonProject : MonoBehaviour
         text.text = project.Name;
     }
 
-    public void SetText(string newText)
+    public void RefreshText()
     {
-        text.text = newText;
+        text.text = Project.Name;
     }
 
     public void OnProjectClick()
     {
         ProjectManager.Instance.LoadProjectById(Project.Id);
     }
+
 }
