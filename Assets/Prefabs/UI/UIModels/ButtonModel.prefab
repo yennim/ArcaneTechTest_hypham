@@ -149,7 +149,8 @@ MonoBehaviour:
   text: {fileID: 5676694657863476460}
   droppableLayerMasks:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 128
+  previewFloatingDistance: 11
 --- !u!1 &5415007007031474032
 GameObject:
   m_ObjectHideFlags: 0
