@@ -103,6 +103,7 @@ public class ProjectManager : MonoBehaviour
     {
         currentProject = new Project(NEW_PROJECT_NAME);
         activeModelControllers = new List<ModelController>();
+        ClearContainer(modelsContainer);
 
         uiProjects.Initialize(projects, currentProject);
 

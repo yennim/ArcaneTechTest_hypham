@@ -9,6 +9,8 @@ public class ModelController : MonoBehaviour
     private Mesh mesh;
     private Vector3 initialScale;
     private int selectedTriangleIndex = -1;
+    private BoxCollider modelCollider;
+    private float modelHalfHeight;
 
     [SerializeField] private GameObject modelObject;
     [SerializeField] private UIModelState uiEditModel;
@@ -30,6 +32,13 @@ public class ModelController : MonoBehaviour
         }
     }
 
+    private void TryInitializeCollider()
+    {
+        if (modelCollider == null)
+        {
+            modelCollider = modelObject.GetComponentInChildren<BoxCollider>();
+        }
+    }
     private void RefreshSelectedState(ModelController modelController)
     {
         isSelected = (modelController == this);
@@ -51,6 +60,21 @@ public class ModelController : MonoBehaviour
         if (meshFilter)
         {
             mesh = meshFilter.mesh;
+        }
+
+        TryInitializeCollider();
+        RefreshModelHeight();
+    }
+
+    public void RefreshModelHeight()
+    {
+        if (modelCollider != null)
+        {
+            modelHalfHeight = (modelCollider.size.y / 2) * modelObject.transform.localScale.y;
+        }
+        else
+        {
+            Debug.LogError("No collider found on model object");
         }
     }
 
@@ -122,7 +146,9 @@ public class ModelController : MonoBehaviour
         float newScaleY = initialScale.y * multiplier;
 
         modelObject.transform.localScale = initialScale * multiplier;
-        modelObject.transform.localPosition = new Vector3(modelObject.transform.localPosition.x, newScaleY / 2f, modelObject.transform.localPosition.z);
+        RefreshModelHeight();
+
+        modelObject.transform.localPosition = new Vector3(modelObject.transform.localPosition.x, modelHalfHeight, modelObject.transform.localPosition.z);
     }
 
     public void UpdateScaleX(float newScaleX)
@@ -133,8 +159,14 @@ public class ModelController : MonoBehaviour
 
     public void UpdateScaleY(float newScaleY)
     {
+        Debug.LogError($"[UpdateScaleY] Before change HALF HEIGHT: {modelHalfHeight}");
+
         modelObject.transform.localScale = new Vector3(modelObject.transform.localScale.x, newScaleY, modelObject.transform.localScale.z);
-        modelObject.transform.localPosition = new Vector3(modelObject.transform.localPosition.x, newScaleY / 2f, modelObject.transform.localPosition.z);
+        RefreshModelHeight();
+
+        Debug.LogError($"[UpdateScaleY] NEW SCALE Y: {newScaleY}");
+        Debug.LogError($"[UpdateScaleY] CALCULATED HALF HEIGHT: {modelHalfHeight}");
+        modelObject.transform.localPosition = new Vector3(modelObject.transform.localPosition.x, modelHalfHeight, modelObject.transform.localPosition.z);
         initialScale = modelObject.transform.localScale;
     }
 
